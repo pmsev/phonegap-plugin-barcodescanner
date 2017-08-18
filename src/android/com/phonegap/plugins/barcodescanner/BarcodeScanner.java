@@ -206,17 +206,19 @@ public class BarcodeScanner extends CordovaPlugin {
         });
     }
 
-    public String detectEncoding(String text){
-        if (text!=null && text.startsWith("ST")){
-            String encodingSign=text.substring(6,7);
-            switch (encodingSign){
-                case "1" : return "cp1251";
-                case "2" : return "UTF8";
-                case "3" : return "koi8_r";
-            }
-        }
-        return "cp1251";
-    }
+    private String detectEncoding(String text){
+           if (text!=null && text.startsWith("ST")){
+               String encodingSign=text.substring(6,7);
+               if (encodingSign.equals("1"))
+                   return "cp1251";
+               if (encodingSign.equals("2"))
+                   return "UTF8";
+               if (encodingSign.equals("3"))
+                   return "koi8_r";
+               }
+           }
+           return "cp1251";
+      }
 
     /**
      * Called when the barcode scanner intent completes.
