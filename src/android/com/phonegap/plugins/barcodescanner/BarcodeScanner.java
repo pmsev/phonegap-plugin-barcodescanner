@@ -206,7 +206,7 @@ public class BarcodeScanner extends CordovaPlugin {
         });
     }
 
-    private String detectEncoding(String text){
+    private String detectEncoding(String text) {
            if (text!=null && text.startsWith("ST")){
                String encodingSign=text.substring(6,7);
                if (encodingSign.equals("1"))
@@ -242,7 +242,7 @@ public class BarcodeScanner extends CordovaPlugin {
                     obj.put(TEXT, res);
                     obj.put(FORMAT, intent.getStringExtra("SCAN_RESULT_FORMAT"));
                     obj.put(CANCELLED, false);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     Log.d(LOG_TAG, "This should never happen");
                 }
                 //this.success(new PluginResult(PluginResult.Status.OK, obj), this.callback);
