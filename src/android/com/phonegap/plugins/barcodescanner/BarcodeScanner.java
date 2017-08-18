@@ -215,8 +215,8 @@ public class BarcodeScanner extends CordovaPlugin {
                    return "UTF8";
                if (encodingSign.equals("3"))
                    return "koi8_r";
-               }
-           }
+            }
+
            return "cp1251";
       }
 
