@@ -235,7 +235,7 @@ public class BarcodeScanner extends CordovaPlugin {
                 JSONObject obj = new JSONObject();
                 try {
                     String res=intent.getStringExtra("SCAN_RESULT");
-                    if (res!=null && res.isEmpty()){
+                    if (res!=null && !res.isEmpty()){
                         String encoding=detectEncoding(res);
                         res = new String(res.getBytes("cp1252"), encoding);
                     }
