@@ -237,7 +237,8 @@ public class BarcodeScanner extends CordovaPlugin {
                     String res=intent.getStringExtra("SCAN_RESULT");
                     if (res!=null && !res.isEmpty()){
                         String encoding=detectEncoding(res);
-                        res = new String(res.getBytes("cp1252"), encoding);
+                        if (!encoding.equals("UTF8"))
+                            res = new String(res.getBytes("cp1252"), encoding);
                     }
                     obj.put(TEXT, res);
                     obj.put(FORMAT, intent.getStringExtra("SCAN_RESULT_FORMAT"));
