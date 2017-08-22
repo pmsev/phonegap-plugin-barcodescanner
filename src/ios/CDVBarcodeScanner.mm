@@ -269,7 +269,7 @@
     NSMutableDictionary* resultDict = [[NSMutableDictionary new] autorelease];
     resultDict[@"text"] = scannedText;
     if ([scannedText length] != 0) {
-        NSStringEncoding encoding = detectEncoding (scannedText) ;
+        NSStringEncoding encoding = [self detectEncoding:scannedText] ;
         if ( encoding != NSUTF8StringEncoding) {
             NSData *dt = [scannedText dataUsingEncoding: NSWindowsCP1252StringEncoding ] ;
             NSString *str = [ [ NSString alloc ] initWithData: dt encoding: encoding ] ;
