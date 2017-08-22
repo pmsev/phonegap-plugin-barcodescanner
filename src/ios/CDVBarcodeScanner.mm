@@ -251,7 +251,7 @@
 
 -(NSStringEncoding)detectEncoding:(NSString*)text{
     if([text hasPrefix:@"ST"]) {
-        NSString* encoding= [text substringWithRange:NSMakeRange(6, 7)];
+        NSString* encoding= [text substringWithRange:NSMakeRange(6, 1)];
         if([encoding isEqualToString:@"1"])
             return NSWindowsCP1251StringEncoding;
         if([encoding isEqualToString:@"2"])
