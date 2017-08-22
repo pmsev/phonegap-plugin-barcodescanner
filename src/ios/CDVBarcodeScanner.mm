@@ -86,6 +86,7 @@
 - (zxing::Ref<zxing::LuminanceSource>) getLuminanceSourceFromSample:(CMSampleBufferRef)sampleBuffer imageBytes:(uint8_t**)ptr;
 - (UIImage*) getImageFromLuminanceSource:(zxing::LuminanceSource*)luminanceSource;
 - (void)dumpImage:(UIImage*)image;
+- (NSStringEncoding)detectEncoding:(NSString*)text;
 @end
 
 //------------------------------------------------------------------------------
@@ -256,7 +257,7 @@
         if([encoding isEqualToString:@"2"])
             return NSUTF8StringEncoding;
         if([encoding isEqualToString:@"3"])
-            return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingKOI8_R)‌;
+            return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingKOI8_R);
     }
     return NSWindowsCP1251StringEncoding;
 }
