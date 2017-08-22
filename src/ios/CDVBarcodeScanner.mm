@@ -247,12 +247,34 @@
     [[self commandDelegate] sendPluginResult:result callbackId:callback];
 }
 
+
+-(NSStringEncoding)detectEncoding:(NSString*)text{
+    if([text hasPrefix:@"ST"]) {
+        NSString* encoding= [text substringWithRange:NSMakeRange(6, 7)];
+        if([encoding isEqualToString:@"1"])
+            return NSWindowsCP1251StringEncoding;
+        if([encoding isEqualToString:@"2"])
+            return NSUTF8StringEncoding;
+        if([encoding isEqualToString:@"3"])
+            return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingKOI8_R)‌;
+    }
+    return NSWindowsCP1251StringEncoding;
+}
+
 //--------------------------------------------------------------------------
 - (void)returnSuccess:(NSString*)scannedText format:(NSString*)format cancelled:(BOOL)cancelled flipped:(BOOL)flipped callback:(NSString*)callback{
     NSNumber* cancelledNumber = @(cancelled ? 1 : 0);
 
     NSMutableDictionary* resultDict = [[NSMutableDictionary new] autorelease];
     resultDict[@"text"] = scannedText;
+    if ([scannedText length] != 0) {
+        NSString *encoding = detectEncoding (scannedText) ;
+        if ( encoding != NSUTF8StringEncoding) {
+            NSData *dt = [scannedText dataUsingEncoding: NSWindowsCP1252StringEncoding ] ;
+            NSString *str = [ [ NSString alloc ] initWithData: dt encoding: encoding ] ;
+            resultDict[@"text"] = str ;
+        }
+    }
     resultDict[@"format"] = format;
     resultDict[@"cancelled"] = cancelledNumber;
 
@@ -524,7 +546,7 @@ parentViewController:(UIViewController*)parentViewController
     else {
         return @"unable to add video capture output to session";
     }
-    
+
     [output setMetadataObjectTypes:[self formatObjectTypes]];
 
     // setup capture preview layer
@@ -630,9 +652,9 @@ parentViewController:(UIViewController*)parentViewController
     if (self.formats != nil) {
         supportedFormats = [self.formats componentsSeparatedByString:@","];
     }
-    
+
     NSMutableArray * formatObjectTypes = [NSMutableArray array];
-    
+
     if (self.formats == nil || [supportedFormats containsObject:@"QR_CODE"]) [formatObjectTypes addObject:AVMetadataObjectTypeQRCode];
     if (self.formats == nil || [supportedFormats containsObject:@"AZTEC"]) [formatObjectTypes addObject:AVMetadataObjectTypeAztecCode];
     if (self.formats == nil || [supportedFormats containsObject:@"DATA_MATRIX"]) [formatObjectTypes addObject:AVMetadataObjectTypeDataMatrixCode];
@@ -644,7 +666,7 @@ parentViewController:(UIViewController*)parentViewController
     if (self.formats == nil || [supportedFormats containsObject:@"CODE_39"]) [formatObjectTypes addObject:AVMetadataObjectTypeCode39Code];
     if (self.formats == nil || [supportedFormats containsObject:@"ITF"]) [formatObjectTypes addObject:AVMetadataObjectTypeITF14Code];
     if (self.formats == nil || [supportedFormats containsObject:@"PDF_417"]) [formatObjectTypes addObject:AVMetadataObjectTypePDF417Code];
-    
+
     return formatObjectTypes;
 }
 
@@ -969,16 +991,16 @@ parentViewController:(UIViewController*)parentViewController
         NSLog(@"%@", @"An error occurred loading the overlay xib.  It appears that the overlayView outlet is not set.");
         return nil;
     }
-	
+
 	self.overlayView.autoresizesSubviews = YES;
     self.overlayView.autoresizingMask    = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.overlayView.opaque              = NO;
-	
+
 	CGRect bounds = self.view.bounds;
     bounds = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
-	
+
 	[self.overlayView setFrame:bounds];
-	
+
     return self.overlayView;
 }
 
